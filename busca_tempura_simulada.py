@@ -3,7 +3,7 @@ import copy
 import math
 import random
 
-from grafo import Grafo , geraGrafoCompleto5
+from grafo_matriz_adjacencias import Grafo , geraGrafoCompleto5
 
 
 
@@ -22,11 +22,11 @@ def heuristica(estado , grafo):
     # estado será uma STRING contendo a sequência de vértices tendo A como origem e destino
     # o valor da heurística será a soma dos pesos das arestas do caminho
     # a função retorna o valor da heurística
-    atual = grafo.getVertice(estado[0])
+    atual = estado[0]
     heuristica = 0
     for i in range(1, len(estado)):
-        proximo = grafo.getVertice(estado[i])
-        heuristica += grafo.getAresta(atual, proximo).peso
+        proximo = estado[i]
+        heuristica += grafo.getAresta(atual, proximo)
         atual = proximo
     return heuristica
 
