@@ -3,7 +3,7 @@ import copy
 import math
 import random
 
-from grafo_matriz_adjacencias import Grafo , geraGrafoCompleto5
+from grafo_matriz_adjacencias import Grafo , geraGrafoCompleto10
 
 
 
@@ -36,17 +36,14 @@ def escalonamento(tempo):
 
 def sucessor_aleatorio(no):
     noAux = copy.deepcopy(no)
-    # gera um sucessor aleatório que altera a ordem de dois vértices
-    i = random.randint(1, no.estado.__len__()-2)
-    j = random.randint(1,  no.estado.__len__()-2)
-    #print("O valor de i é: ", i, "O valor de j é: ", j)
-    while i == j:
-        j = random.randint(1,  no.estado.__len__()-2)
-    # troca os vértices i e j sabendo que no.estado é uma string mas não altera o tamanho da string
-    vertice1 = noAux.estado[i]
-    vertice2 = noAux.estado[j]
-    noAux.estado = noAux.estado[:i] + vertice2 + noAux.estado[i+1:]
-    noAux.estado = noAux.estado[:j] + vertice1 + noAux.estado[j+1:]
+    posCidade = random.randint(1, no.estado.__len__() -2)
+    cidade = noAux.estado[posCidade]
+    noAux.estado.remove(cidade)
+
+    posAleatoria = random.randint(1, noAux.estado.__len__() -2)
+    if posAleatoria == posCidade:
+        posAleatoria = random.randint(1, noAux.estado.__len__() -2)
+    noAux.estado.insert(posAleatoria, cidade) 
 
     return noAux
 
@@ -82,12 +79,33 @@ def busca_tempera_simulada(problema , grafo, limite):
 
 
 def main():
-    grafo = geraGrafoCompleto5()
-    atual = "ABEDCA"
+    grafo = geraGrafoCompleto10()
+    individuo = ['Arad', 'Timisoara' , 'Rimnicu Vilcea', 'Lugoj', 'Zerind', 'Fagaras', 'Oradea', 'Pitesti', 'Mehadia', 'Sibiu', 'Arad']
+
+
+    # faça um geração de individuos aleatórios
+    melhor = None
+    menor = 999999999
+    for i in range(1):
+        individuo = copy.deepcopy(individuo)
+        cidade = individuo[0]
+        individuo.remove(cidade)
+        individuo.remove(cidade)
+        random.shuffle(individuo)
+        individuo.insert(0, cidade)
+        individuo.append(cidade)
+
+        resultado = busca_tempera_simulada(individuo, grafo,1000)
+        if resultado.heuristica < menor:
+            menor = resultado.heuristica
+            melhor = resultado
+
+        #print(heuristica(individuo, grafo))
+
+    
     #print (heuristica(atual, grafo))
-    resultado = busca_tempera_simulada(atual, grafo,1000)
-    print("O menor caminho é: ", resultado.estado)
-    print ("O valor da heurística é: ", resultado.heuristica)
+    print("O menor caminho é: ", melhor.estado)
+    print ("O valor da heurística é: ", melhor.heuristica)
     """while True:
         sucessor = sucessor_aleatorio(No(atual))
         print("O valor de sucessor é: ", sucessor.estado)"""
