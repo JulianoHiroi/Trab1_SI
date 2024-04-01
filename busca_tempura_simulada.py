@@ -3,7 +3,7 @@ import copy
 import math
 import random
 
-from grafo_matriz_adjacencias import Grafo , geraGrafoCompleto10
+from grafo_matriz_adjacencias import Grafo , geraGrafoCompleto10 , geraGrafoCidades
 
 
 
@@ -79,8 +79,8 @@ def busca_tempera_simulada(problema , grafo, limite):
 
 
 def main():
-    grafo = geraGrafoCompleto10()
-    individuo = ['Arad', 'Timisoara' , 'Rimnicu Vilcea', 'Lugoj', 'Zerind', 'Fagaras', 'Oradea', 'Pitesti', 'Mehadia', 'Sibiu', 'Arad']
+    grafo = geraGrafoCidades("grafo.txt")
+    individuo = ['Arad', 'Timisoara' , 'Rimnicu', 'Lugoj', 'Zerind', 'Fagaras', 'Oradea', 'Pitesti', 'Mehadia', 'Sibiu', 'Arad']
 
 
     # faça um geração de individuos aleatórios

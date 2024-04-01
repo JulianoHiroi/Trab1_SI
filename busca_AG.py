@@ -1,9 +1,9 @@
 
-from grafo_matriz_adjacencias import Grafo , geraGrafoCompleto5 , geraGrafoCompleto10 , listaAleatoria
+from grafo_matriz_adjacencias import Grafo , geraGrafoCompleto5 , geraGrafoCompleto10 , listaAleatoria , geraGrafoCidades
 import copy
 import random
 
-PROBABILIDADE_MUTACAO = 0.1
+PROBABILIDADE_MUTACAO = 0.2
 
 class No:
     def __init__(self, estado , grafo):
@@ -32,13 +32,13 @@ def selecao_aleatoria(populacao):
     soma = 0
     for i in range(len(populacao)):
         soma += populacao[i].funcao_adaptativa
-    soma = 0
+    somaProbabilidade = 0
     for i in range(len(populacao)):
         populacao[i].probabilidade = soma - populacao[i].funcao_adaptativa
-        soma += populacao[i].probabilidade
+        somaProbabilidade += populacao[i].probabilidade
     probabilidade = []
     for i in range(len(populacao)):
-        probabilidade.append(populacao[i].probabilidade / soma)
+        probabilidade.append(populacao[i].probabilidade / somaProbabilidade)
     acumulado = 0
     r = random.random()
     for i in range ( len(populacao)):
@@ -96,51 +96,43 @@ def algoritmo_genetico(populacao, grafo , limite):
     menor = 999999999
     while limite > 0:
         limite = limite - 1
-        nova_populacao = []
-        for i in range ( len(populacao) // 2):
+        nova_populacao = []      
+        for i in range ( len(populacao)):
             x = selecao_aleatoria(populacao)
             y = selecao_aleatoria(populacao)
-            filho1 = cruzamento(x, y, grafo)
-            filho2 = cruzamento(y, x, grafo)
+            filho = cruzamento(x, y, grafo)
             if(PROBABILIDADE_MUTACAO > random.random()):
-                filho1 = mutacao(filho1 , grafo)
-            if(PROBABILIDADE_MUTACAO > random.random()):
-                filho2 = mutacao(filho2 , grafo)
-            if (filho1.funcao_adaptativa < menor):
-                menor = filho1.funcao_adaptativa
-                melhor = filho1
-            if (filho2.funcao_adaptativa < menor):
-                menor = filho2.funcao_adaptativa
-                melhor = filho2
+                filho = mutacao(filho , grafo)
             
-            nova_populacao.append(filho1)
-            nova_populacao.append(filho2)
-            populacao = nova_populacao
+            if (filho.funcao_adaptativa < menor):
+                menor = filho.funcao_adaptativa
+                melhor = filho
+            nova_populacao.append(filho)
+        populacao = nova_populacao
     
     return melhor
 
-def main():
-    grafo = geraGrafoCompleto10()
+def criarPopulacaoInicial(grafo, tamanho):
     populacao = []
-    individuo1 = listaAleatoria("Arad")
-    individuo2 = listaAleatoria("Arad")
-    individuo3 = listaAleatoria("Arad")
-    individuo4 = listaAleatoria("Arad")
-    populacao.append(No(individuo1, grafo))
-    populacao.append(No(individuo2, grafo))
-    populacao.append(No(individuo3, grafo))
-    populacao.append(No(individuo4, grafo))
+    for i in range(tamanho):
+        individuo = listaAleatoria("Arad")
+        no = No(individuo, grafo)
+        populacao.append(no)
+    return populacao
 
-    print(" O tamanho da população é: ", populacao[0].estado.__len__() - 1)
+def main():
+    grafo = geraGrafoCidades("grafo.txt")
+    populacao = criarPopulacaoInicial(grafo, 4)
+
     melhor = None
     menor = 999999999
-    for i in range(5):
-        solucao = algoritmo_genetico(populacao, grafo, 5000)
-        if (solucao.funcao_adaptativa < menor):
+    for i in range(100):
+        solucao = algoritmo_genetico(populacao, grafo, 100)
+        if solucao.funcao_adaptativa < menor:
             menor = solucao.funcao_adaptativa
             melhor = solucao
-    print("Melhor caminho: ", melhor.estado)
-    print("Menor caminho: ", melhor.funcao_adaptativa)
 
+    print(melhor.estado)
+    print(melhor.funcao_adaptativa)
 if __name__ == "__main__":
     main()

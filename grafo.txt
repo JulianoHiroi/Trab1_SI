@@ -1,0 +1,10 @@
+Arad 82 3 
+Oradea 88 16
+Zerind 29 55
+Rimnicu 84 86 
+Sibiu 57 29
+Lugoj 10 85
+Timisoara 35 30
+Mehadia 54 10
+Fagaras 80 52
+Pitesti 78 60
