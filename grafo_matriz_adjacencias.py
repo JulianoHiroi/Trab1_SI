@@ -37,7 +37,7 @@ class Grafo:
                 if self.matriz[i][j] != 0:
                     print(self.vertices[j], end=", ")
                     print("Peso: ", self.matriz[i][j], end=" ")
-            print()
+            
     def printMatriz(self):
         for i in range(self.tamanho):
             for j in range(self.tamanho):
