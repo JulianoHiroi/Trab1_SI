@@ -3,11 +3,11 @@ import copy
 import math
 import random
 
+import numpy as np
+
 from grafo_matriz_adjacencias import Grafo , geraGrafoCompleto10 , geraGrafoCidades
 
 
-
-TAMANHO = 8
 TEMP_INICIAL = 100
 ALPHA = 0.9999
 
@@ -113,8 +113,9 @@ def main():
     (83, 24), (73, 98), (84, 7), (54, 12), (76, 6), (1, 83), (33, 45), (8, 87), (94, 65), (18, 58),
     (52, 88), (40, 25), (82, 7), (52, 63), (87, 79), (79, 9), (50, 38), (66, 81), (96, 35), (2, 80),
     (58, 82), (87, 63), (54, 88), (41, 100), (37, 70), (88, 72), (76, 57), (7, 24), (99, 95), (24, 48),
-    (17, 69), (77, 24), (35, 59), (44, 51)
-]
+    (17, 69), (77, 24), (35, 59), (44, 51)]
+
+    resultados = np.zeros(10)
     for i in range(10):
         with open(f'teste_{i}.txt', 'w') as arquivo:
             individuo = copy.deepcopy(individuo)
@@ -127,11 +128,14 @@ def main():
             arquivo.write(f"{grafo.vertices.__len__()} cidades\n")
             arquivo.write(f"{coordenadas}\n")
             resultado = busca_tempera_simulada(individuo, grafo, 100000 , arquivo)
-            print(resultado.heuristica)
+            resultados[i] = resultado.heuristica
+            #print(resultado.heuristica)
             if resultado.heuristica < menor:
                 menor = resultado.heuristica
                 melhor = resultado
-
+    print(menor)
+    print(resultados.max())
+    print(resultados.mean())
         
 
     
